@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+
+	"github.com/Wartemelon/TODO-list/pkg/api"
 )
 
 func Run() {
@@ -16,6 +18,8 @@ func Run() {
 	}
 
 	webDir := filepath.Join(curDir, "web")
+
+	api.Init()
 	http.Handle("/", http.FileServer(http.Dir(webDir)))
 
 	port := os.Getenv("TODO_PORT")
