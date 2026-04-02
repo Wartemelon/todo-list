@@ -7,7 +7,7 @@ import (
 	"github.com/Wartemelon/TODO-list/pkg/service"
 )
 
-func nextDayHandler(res http.ResponseWriter, req *http.Request) {
+func nextDateHandler(res http.ResponseWriter, req *http.Request) {
 	nowStr := req.FormValue("now")
 	var now time.Time
 	var err error
