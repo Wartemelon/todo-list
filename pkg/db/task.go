@@ -1,5 +1,7 @@
 package db
 
+import "fmt"
+
 type Task struct {
 	ID      string `json:"id"`
 	Date    string `json:"date"`
@@ -18,6 +20,36 @@ func AddTask(t *Task) (int64, error) {
 	}
 
 	return id, err
+}
+
+func GetTask(id string) (*Task, error) {
+	query := "SELECT * FROM scheduler WHERE id = ?"
+	res := db.QueryRow(query, id)
+
+	t := Task{}
+	err := res.Scan(&t.ID, &t.Date, &t.Title, &t.Comment, &t.Repeat)
+	if err != nil {
+		return nil, err
+	}
+
+	return &t, nil
+}
+
+func UpdateTask(task *Task) error {
+	query := "UPDATE scheduler SET date = ?, title = ?, comment = ?, repeat = ? WHERE id = ?"
+	res, err := db.Exec(query, task.Date, task.Title, task.Comment, task.Repeat, task.ID)
+	if err != nil {
+		return err
+	}
+
+	count, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if count == 0 {
+		return fmt.Errorf(`incorrect id for updating task`)
+	}
+	return nil
 }
 
 func TasksByText(search string, limit int) ([]*Task, error) {
