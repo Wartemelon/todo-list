@@ -12,5 +12,7 @@ func taskHandler(res http.ResponseWriter, req *http.Request) {
 		getTaskHandler(res, req)
 	case http.MethodPut:
 		changeTaskHandler(res, req)
+	case http.MethodDelete:
+		deleteTaskHandler(res, req)
 	}
 }
