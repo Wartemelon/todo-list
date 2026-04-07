@@ -15,6 +15,7 @@ func main() {
 	}
 
 	err := db.Init(dbFile)
+	defer db.Close()
 	if err != nil {
 		log.Fatalln(err)
 	}
