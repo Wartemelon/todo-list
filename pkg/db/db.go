@@ -32,7 +32,9 @@ func Init(dbFile string) error {
 	}
 
 	if install {
-		db.Exec(schema)
+		if _, err := db.Exec(schema); err != nil {
+			return err
+		}
 	}
 
 	return nil
