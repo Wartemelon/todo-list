@@ -17,15 +17,22 @@ func taskDoneHandler(res http.ResponseWriter, req *http.Request) {
 	}
 
 	if t.Repeat == "" {
-		db.DeleteTask(id)
+		if err := db.DeleteTask(id); err != nil {
+			writeJson(res, map[string]string{"error": err.Error()})
+			return
+		}
 		writeJson(res, map[string]any{})
+		return
 	} else {
 		next, err := service.NextDate(time.Now(), t.Date, t.Repeat)
 		if err != nil {
 			writeJson(res, map[string]string{"error": err.Error()})
 			return
 		}
-		db.UpdateDate(next, id)
+		if err := db.UpdateDate(next, id); err != nil {
+			writeJson(res, map[string]string{"error": err.Error()})
+			return
+		}
 		writeJson(res, map[string]any{})
 	}
 
