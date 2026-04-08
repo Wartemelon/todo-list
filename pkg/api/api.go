@@ -9,9 +9,10 @@ const dateFormat = "20060102"
 
 func Init() {
 	http.HandleFunc("/api/nextdate", nextDateHandler)
-	http.HandleFunc("/api/task", taskHandler)
-	http.HandleFunc("/api/tasks", tasksHandler)
-	http.HandleFunc("/api/task/done", taskDoneHandler)
+	http.HandleFunc("/api/task", auth(taskHandler))
+	http.HandleFunc("/api/tasks", auth(tasksHandler))
+	http.HandleFunc("/api/task/done", auth(taskDoneHandler))
+	http.HandleFunc("/api/signin", signinHandler)
 }
 
 func writeJson(res http.ResponseWriter, data any) error {
