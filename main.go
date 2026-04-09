@@ -11,7 +11,7 @@ import (
 func main() {
 	dbFile := os.Getenv("TODO_DBFILE")
 	if dbFile == "" {
-		log.Fatalln("Environmental value: TODO_DBFILE must be not empty")
+		dbFile = "scheduler.db"
 	}
 
 	err := db.Init(dbFile)
