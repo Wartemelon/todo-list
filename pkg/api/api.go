@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -15,14 +16,18 @@ func Init() {
 	http.HandleFunc("/api/signin", signinHandler)
 }
 
-func writeJson(res http.ResponseWriter, data any) error {
+func writeJson(res http.ResponseWriter, data any, code int) {
 	resp, err := json.Marshal(data)
 	if err != nil {
-		return err
+		log.Println(err)
+		return
 	}
 
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	res.Write(resp)
-
-	return nil
+	res.WriteHeader(code)
+	_, err = res.Write(resp)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 }

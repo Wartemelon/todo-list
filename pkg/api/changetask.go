@@ -15,30 +15,30 @@ func changeTaskHandler(res http.ResponseWriter, req *http.Request) {
 
 	_, err := buf.ReadFrom(req.Body)
 	if err != nil {
-		writeJson(res, map[string]string{"error": err.Error()})
+		writeJson(res, map[string]string{"error": err.Error()}, http.StatusBadRequest)
 		return
 	}
 
 	if err = json.Unmarshal(buf.Bytes(), &task); err != nil {
-		writeJson(res, map[string]string{"error": err.Error()})
+		writeJson(res, map[string]string{"error": err.Error()}, http.StatusBadRequest)
 		return
 	}
 
 	if task.Title == "" {
-		writeJson(res, map[string]string{"error": "title can not be empty"})
+		writeJson(res, map[string]string{"error": "title can not be empty"}, http.StatusBadRequest)
 		return
 	}
 
 	err = service.CheckDate(&task)
 	if err != nil {
-		writeJson(res, map[string]string{"error": err.Error()})
+		writeJson(res, map[string]string{"error": err.Error()}, http.StatusBadRequest)
 		return
 	}
 
 	err = db.UpdateTask(&task)
 	if err != nil {
-		writeJson(res, map[string]string{"error": err.Error()})
+		writeJson(res, map[string]string{"error": err.Error()}, http.StatusInternalServerError)
 		return
 	}
-	writeJson(res, map[string]any{})
+	writeJson(res, map[string]any{}, http.StatusOK)
 }

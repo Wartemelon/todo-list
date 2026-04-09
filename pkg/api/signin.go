@@ -21,19 +21,19 @@ func signinHandler(res http.ResponseWriter, req *http.Request) {
 
 	_, err := buf.ReadFrom(req.Body)
 	if err != nil {
-		writeJson(res, map[string]string{"error": err.Error()})
+		writeJson(res, map[string]string{"error": err.Error()}, http.StatusBadRequest)
 		return
 	}
 
 	if err = json.Unmarshal(buf.Bytes(), &reqBody); err != nil {
-		writeJson(res, map[string]string{"error": err.Error()})
+		writeJson(res, map[string]string{"error": err.Error()}, http.StatusBadRequest)
 		return
 	}
 
 	reqPassword := reqBody.Password
 	envPassword := os.Getenv("TODO_PASSWORD")
 	if reqPassword != envPassword {
-		writeJson(res, map[string]string{"error": "Incorrect password"})
+		writeJson(res, map[string]string{"error": "Incorrect password"}, http.StatusBadRequest)
 		return
 	}
 
@@ -48,9 +48,9 @@ func signinHandler(res http.ResponseWriter, req *http.Request) {
 
 	signedToken, err := jwtToken.SignedString(secret)
 	if err != nil {
-		writeJson(res, map[string]string{"error": err.Error()})
+		writeJson(res, map[string]string{"error": err.Error()}, http.StatusInternalServerError)
 		return
 	}
 
-	writeJson(res, map[string]string{"token": signedToken})
+	writeJson(res, map[string]string{"token": signedToken}, http.StatusOK)
 }

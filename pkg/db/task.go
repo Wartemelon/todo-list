@@ -107,6 +107,11 @@ func TasksByText(search string, limit int) ([]*Task, error) {
 		res = append(res, &t)
 	}
 
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
 	if res == nil {
 		res = make([]*Task, 0)
 	}
@@ -132,6 +137,11 @@ func TasksByDate(date string, limit int) ([]*Task, error) {
 		}
 
 		res = append(res, &t)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return nil, err
 	}
 
 	if res == nil {

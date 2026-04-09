@@ -24,10 +24,10 @@ func tasksHandler(res http.ResponseWriter, req *http.Request) {
 	}
 
 	if err != nil {
-		writeJson(res, map[string]string{"error": err.Error()})
+		writeJson(res, map[string]string{"error": err.Error()}, http.StatusInternalServerError)
 		return
 	}
 	writeJson(res, TasksResp{
 		Tasks: tasks,
-	})
+	}, http.StatusOK)
 }
