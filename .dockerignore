@@ -1,0 +1,6 @@
+.github/
+tests/
+*.md
+scheduler.db
+.dockerignore
+Dockerfile
